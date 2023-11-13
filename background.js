@@ -46,3 +46,42 @@ chrome.alarms.onAlarm.addListener(function (alarm) {
     });
   }
 });
+
+// ayat reminder 
+let ayahs = [];
+
+fetch(chrome.runtime.getURL('quran.json'))
+  .then(response => response.json())
+  .then(data => {
+    ayahs = data;
+    scheduleAyahNotifications();
+  });
+
+  function scheduleAyahNotifications() {
+    chrome.alarms.create("ayahAlarm", {
+      delayInMinutes: 10, // Initial delay of 10 minutes
+      periodInMinutes: 10, // Repeat the alarm every 10 minutes
+    });
+  }
+  
+  chrome.alarms.onAlarm.addListener(function (alarm) {
+    if (alarm.name === "ayahAlarm") {
+      showRandomAyahNotification();
+    }
+  });
+
+function showRandomAyahNotification() {
+  const randomIndex = Math.floor(Math.random() * ayahs.length);
+  const randomAyah = ayahs[randomIndex];
+
+  const notificationOptions = {
+    type: "basic",
+    iconUrl: "images/icon2.png",
+    title: "تدبر",
+    message: randomAyah.aya_text_emlaey,
+    message: `${randomAyah.aya_text_emlaey}\n- سورة ${randomAyah.sura_name_ar}-آية ${randomAyah.aya_no}`,
+
+  };
+
+  chrome.notifications.create(notificationOptions);
+}
