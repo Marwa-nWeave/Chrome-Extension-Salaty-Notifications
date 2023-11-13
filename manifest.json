@@ -1,0 +1,42 @@
+{
+    "manifest_version": 3,
+    "name": "صلاتي",
+    "description": "التذكير بمواقيت الصلاة",
+    "version": "1.0",
+    "permissions": ["alarms", "notifications"],
+    "action": {
+    "default_icon": {
+      "16": "images/icon.png",
+      "32": "images/icon.png",
+      "48": "images/icon.png",
+      "128":"images/icon.png"
+    }
+    },
+    "icons": {
+      "16": "images/icon.png",
+      "32": "images/icon.png",
+      "48": "images/icon.png",
+      "128":"images/icon.png"
+    },
+    "background": {
+      "service_worker": "background.js"
+    },
+    "content_scripts": [
+      {
+        "matches": ["*://*/*"],
+        "css": ["main.css"],
+        "js": ["main.js"]
+      }
+    ],
+  
+    "web_accessible_resources": [
+      {
+        "resources": [
+          "main.css",
+          "images/*"
+        ],
+        "matches": ["*://*/*"]
+      }
+    ]
+
+  }
