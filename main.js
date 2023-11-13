@@ -1,6 +1,5 @@
 const prayerTimes = [
-  // { name: "الفجر", time: "04:55" },
-  { name: "الفجر", time: "15:26" },
+  { name: "الفجر", time: "04:55" },
   { name: "الظهر", time: "11:45" },
   { name: "العصر", time: "14:43" },
   { name: "المغرب", time: "18:04" },

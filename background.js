@@ -1,4 +1,5 @@
 let prayerTimes = [];
+let alarmsSet = false;
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.prayerTimes) {
@@ -8,6 +9,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 });
 
 function scheduleAlarms() {
+  if (alarmsSet) {
+    return; // Alarms already set, do nothing
+  }
+
   Object.entries(prayerTimes).forEach(([index, entry]) => {
     const currentTime = new Date();
     const prayerTime = new Date();
@@ -23,17 +28,21 @@ function scheduleAlarms() {
       delayInMinutes,
       periodInMinutes: 24 * 60, // Repeat the alarm every day
     });
-
-    chrome.alarms.onAlarm.addListener(function (alarm) {
-      if (alarm.name === `prayerAlarm${entry.name}`) {
-        // Display a notification
-        chrome.notifications.create({
-          type: "basic",
-          iconUrl: "images/icon2.png",
-          title: "Reminder",
-          message: ` حان الآن موعد صلاة ${entry.name}`,
-        });
-      }
-    });
   });
+
+  alarmsSet = true; // Mark alarms as set
 }
+
+chrome.alarms.onAlarm.addListener(function (alarm) {
+  const prayerName = alarm.name.substring("prayerAlarm".length);
+  const entry = prayerTimes.find((entry) => entry.name === prayerName);
+  if (entry) {
+    // Display a notification
+    chrome.notifications.create({
+      type: "basic",
+      iconUrl: "images/icon2.png",
+      title: "Reminder",
+      message: `حان الآن موعد صلاة ${entry.name}`,
+    });
+  }
+});
