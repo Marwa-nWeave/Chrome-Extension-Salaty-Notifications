@@ -59,8 +59,8 @@ fetch(chrome.runtime.getURL('quran.json'))
 
   function scheduleAyahNotifications() {
     chrome.alarms.create("ayahAlarm", {
-      delayInMinutes: 10, // Initial delay of 10 minutes
-      periodInMinutes: 10, // Repeat the alarm every 10 minutes
+      delayInMinutes: 5, // Initial delay of 5 minutes
+      periodInMinutes: 5, // Repeat the alarm every 5 minutes
     });
   }
   
