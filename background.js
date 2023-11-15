@@ -47,41 +47,60 @@ chrome.alarms.onAlarm.addListener(function (alarm) {
   }
 });
 
-// ayat reminder 
+// ayat reminder
+
+// ayat reminder
 let ayahs = [];
 
-fetch(chrome.runtime.getURL('quran.json'))
-  .then(response => response.json())
-  .then(data => {
-    ayahs = data;
-    scheduleAyahNotifications();
-  });
-
-  function scheduleAyahNotifications() {
-    chrome.alarms.create("ayahAlarm", {
-      delayInMinutes: 5, // Initial delay of 5 minutes
-      periodInMinutes: 5, // Repeat the alarm every 5 minutes
-    });
+async function fetchData() {
+  try {
+    const response = await fetch(chrome.runtime.getURL("quran.json"));
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("An error occurred while fetching data:", error);
+    return null;
   }
-  
-  chrome.alarms.onAlarm.addListener(function (alarm) {
-    if (alarm.name === "ayahAlarm") {
-      showRandomAyahNotification();
-    }
-  });
+}
 
-function showRandomAyahNotification() {
-  const randomIndex = Math.floor(Math.random() * ayahs.length);
-  const randomAyah = ayahs[randomIndex];
+async function scheduleAyahNotifications() {
+  await fetchData(); // Wait for the JSON data to be fetched and loaded
+
+  chrome.alarms.create("ayahAlarm", {
+    delayInMinutes: 0.5, // Initial delay of 0.5 minutes
+    periodInMinutes: 0.5, // Repeat the alarm every 0.5 minutes
+  });
+}
+
+chrome.alarms.onAlarm.addListener(async function (alarm) {
+  if (alarm.name === "ayahAlarm") {
+    await showRandomAyahNotification(); // Wait for the random ayah notification to be displayed
+  }
+});
+
+async function showRandomAyahNotification() {
+  const data = await fetchData();
+  if (!data) {
+    console.error("No ayah data available");
+    return;
+  }
+
+  const randomIndex = Math.floor(Math.random() * data.length);
+  const randomAyah = data[randomIndex];
+
+  if (!randomAyah || !randomAyah.aya_text_emlaey) {
+    console.error("Invalid ayah data or missing 'aya_text_emlaey' property");
+    return;
+  }
 
   const notificationOptions = {
     type: "basic",
     iconUrl: "images/icon2.png",
     title: "تدبر",
-    message: randomAyah.aya_text_emlaey,
     message: `${randomAyah.aya_text_emlaey}\n- سورة ${randomAyah.sura_name_ar}-آية ${randomAyah.aya_no}`,
-
   };
 
   chrome.notifications.create(notificationOptions);
 }
+
+scheduleAyahNotifications(); // Call the function to schedule the initial ayah notification
