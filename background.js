@@ -1,10 +1,15 @@
 let prayerTimes = [];
 let alarmsSet = false;
+let delayTime = 5;
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.prayerTimes) {
     prayerTimes = message.prayerTimes;
+    delayTime = parseInt(message.delayTime);
+    chrome.runtime.sendMessage({  delayTime: delayTime.toString() });
     scheduleAlarms();
+    scheduleAyahNotifications();
+    
   }
 });
 
@@ -67,8 +72,8 @@ async function scheduleAyahNotifications() {
   await fetchData(); // Wait for the JSON data to be fetched and loaded
 
   chrome.alarms.create("ayahAlarm", {
-    delayInMinutes: 10, // Initial delay of 10 minutes
-    periodInMinutes: 10, // Repeat the alarm every 10 minutes
+    delayInMinutes: delayTime, // Initial delay of 10 minutes
+    periodInMinutes: delayTime, // Repeat the alarm every 10 minutes
   });
 }
 

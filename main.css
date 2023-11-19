@@ -1,2 +1,19 @@
 
+html {
+    min-height: 5em;
+    min-width: 10em;
+    background: rgb(114, 159, 250);
+  }
 
+.custom-submit-btn {
+    background-color: #1972d2b8;
+    color: yellow;
+    border-color: yellow;
+    border-radius: 50%;
+    padding:10px;
+    margin-left: 50px;
+  }
+  .custom-submit-btn:hover {
+    background-color: #0069d9;
+    border-color: #0062cc;
+  }

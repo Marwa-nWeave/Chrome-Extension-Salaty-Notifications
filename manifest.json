@@ -3,14 +3,15 @@
     "name": "صلاتي",
     "description": "التذكير بمواقيت الصلاة",
     "version": "1.0",
-    "permissions": ["alarms", "notifications"],
+    "permissions": ["alarms", "notifications","scripting"],
     "action": {
-    "default_icon": {
-      "16": "images/icon.png",
-      "32": "images/icon.png",
-      "48": "images/icon.png",
-      "128":"images/icon.png"
-    }
+      "default_icon": {
+        "16": "images/icon.png",
+        "32": "images/icon.png",
+        "48": "images/icon.png",
+        "128":"images/icon.png"
+      },
+      "default_popup": "popup.html"
     },
     "icons": {
       "16": "images/icon.png",
