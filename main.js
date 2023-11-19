@@ -1,9 +1,9 @@
 const prayerTimes = [
-  { name: "الفجر", time: "04:55" },
+  { name: "الفجر", time: "4:59" },
   { name: "الظهر", time: "11:45" },
-  { name: "العصر", time: "14:43" },
-  { name: "المغرب", time: "17:10" },
-  { name: "العشاء", time: "18:25" },
+  { name: "العصر", time: "14:40" },
+  { name: "المغرب", time: "17:00" },
+  { name: "العشاء", time: "18:22" },
 ];
 
 chrome.runtime.sendMessage({ prayerTimes });

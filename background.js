@@ -67,8 +67,8 @@ async function scheduleAyahNotifications() {
   await fetchData(); // Wait for the JSON data to be fetched and loaded
 
   chrome.alarms.create("ayahAlarm", {
-    delayInMinutes: 0.5, // Initial delay of 0.5 minutes
-    periodInMinutes: 0.5, // Repeat the alarm every 0.5 minutes
+    delayInMinutes: 10, // Initial delay of 10 minutes
+    periodInMinutes: 10, // Repeat the alarm every 10 minutes
   });
 }
 
