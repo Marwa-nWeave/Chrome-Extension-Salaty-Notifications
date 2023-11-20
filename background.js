@@ -102,7 +102,7 @@ async function showRandomAyahNotification() {
     type: "basic",
     iconUrl: "images/icon2.png",
     title: "تدبر",
-    message: `${randomAyah.aya_text_emlaey}\n- سورة ${randomAyah.sura_name_ar}-آية ${randomAyah.aya_no}`,
+    message: `${randomAyah.aya_text_emlaey}\n سورة ${randomAyah.sura_name_ar} -آية ${randomAyah.aya_no}`,
   };
 
   chrome.notifications.create(notificationOptions);

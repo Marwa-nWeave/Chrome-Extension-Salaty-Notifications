@@ -1,3 +1,43 @@
+
+const currentDate = new Date();
+const year = currentDate.getFullYear();
+const month = currentDate.getMonth() + 1; // Add 1 to get the month number
+const city = 'Alexandria';
+const country = 'Egypt';
+const method = 2;
+let todayObject = null; // Declare todayObject outside the fetch scope
+
+const apiUrl = `https://api.aladhan.com/v1/calendarByCity/${year}/${month}?city=${city}&country=${country}&method=${method}`;
+
+async function fetchData() {
+  try {
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+
+    const day = currentDate.getDate();
+    const monthName = currentDate.toLocaleString('default', { month: 'short' });
+    const currentDateString = `${day} ${monthName} ${year}`;
+
+    todayObject = data.data.find(obj => obj.date.readable === currentDateString);
+
+    if (todayObject) {
+       prayerTimes = [
+        { name: "الفجر", time: todayObject.timings?.Fajr },
+        { name: "الظهر", time: todayObject.timings?.Dhuhr },
+        { name: "العصر", time: todayObject.timings?.Asr },
+        { name: "المغرب", time: todayObject.timings?.Maghrib },
+        { name: "العشاء", time: todayObject.timings?.Isha },
+      ];
+        } else {
+      console.log("No data available for today.");
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+fetchData();
+
 // Receive the message from the background script
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
   const receivedDelayTime = message.delayTime;
@@ -6,14 +46,6 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
   const delayTimeElement = document.getElementById('currentDelayTime');
   delayTimeElement.textContent = receivedDelayTime;
 });
-
-const prayerTimes = [
-  { name: "الفجر", time: "4:59" },
-  { name: "الظهر", time: "11:45" },
-  { name: "العصر", time: "14:40" },
-  { name: "المغرب", time: "17:00" },
-  { name: "العشاء", time: "18:22" },
-];
 
 submitButton.addEventListener('click', function() {
   const delayTimeInput = document.getElementById('delayTime');
