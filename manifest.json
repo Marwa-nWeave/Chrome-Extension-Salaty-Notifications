@@ -3,7 +3,7 @@
     "name": "صلاتي",
     "description": "التذكير بمواقيت الصلاة",
     "version": "1.0",
-    "permissions": ["alarms", "notifications","scripting","activeTab"],
+    "permissions": ["alarms", "notifications","scripting"],
     "action": {
       "default_icon": {
         "16": "images/icon.png",

@@ -1,4 +1,3 @@
-
 const currentDate = new Date();
 const year = currentDate.getFullYear();
 const month = currentDate.getMonth() + 1; // Add 1 to get the month number
@@ -21,14 +20,34 @@ async function fetchData() {
     todayObject = data.data.find(obj => obj.date.readable === currentDateString);
 
     if (todayObject) {
-       prayerTimes = [
+      const prayerTimes = [
         { name: "الفجر", time: todayObject.timings?.Fajr },
         { name: "الظهر", time: todayObject.timings?.Dhuhr },
         { name: "العصر", time: todayObject.timings?.Asr },
         { name: "المغرب", time: todayObject.timings?.Maghrib },
         { name: "العشاء", time: todayObject.timings?.Isha },
       ];
-        } else {
+
+      const submitButton = document.getElementById('submitButton');
+
+      if(submitButton){
+
+        submitButton.addEventListener('click', function() {
+          const delayTimeInput = document.getElementById('delayTime');
+          const delayTime = delayTimeInput.value;
+          if (delayTime === '') {
+            // Display an error message or perform any necessary action
+            console.log('Input field is empty');
+            return;
+          }
+          chrome.runtime.sendMessage({ prayerTimes, delayTime });
+  
+          window.close();
+          // Clear the input field
+          delayTimeInput.value = '';
+        });
+      }
+    } else {
       console.log("No data available for today.");
     }
   } catch (error) {
@@ -38,26 +57,11 @@ async function fetchData() {
 
 fetchData();
 
-// Receive the message from the background script
-chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
-  const receivedDelayTime = message.delayTime;
+    // Receive the message from the background script
+    chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
+      const receivedDelayTime = message.delayTime;
 
-  // Display the delay time in the pop-up
-  const delayTimeElement = document.getElementById('currentDelayTime');
-  delayTimeElement.textContent = receivedDelayTime;
-});
-
-submitButton.addEventListener('click', function() {
-  const delayTimeInput = document.getElementById('delayTime');
-  const delayTime = delayTimeInput.value;
-  if (delayTime === '') {
-    // Display an error message or perform any necessary action
-    console.log('Input field is empty');
-    return;
-  }
-  chrome.runtime.sendMessage({ prayerTimes, delayTime });
-
-  window.close();
-  // Clear the input field
-  delayTimeInput.value = '';
-});
+      // Display the delay time in the pop-up
+      const delayTimeElement = document.getElementById('currentDelayTime');
+      delayTimeElement.textContent = receivedDelayTime;
+    });
